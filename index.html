@@ -184,42 +184,42 @@
 
                 <!-- Acompanhamentos -->
                 <div class="form-group">
-                    <label>Acompanhamentos <span class="required">*</span> (Escolha até 4 opções)</label>
+                    <label>Acompanhamentos <span class="required">*</span> (Máximo: 1 feijão, 1 arroz, 1 macarrão, 1 farofa)</label>
                     <div class="checkbox-group" id="acompanhamentos">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="feijao_preto" name="acompanhamentos" value="Feijão preto">
+                            <input type="checkbox" id="feijao_preto" name="acompanhamentos" value="Feijão preto" data-category="feijao">
                             <label for="feijao_preto">Feijão preto</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="feijao_carioca" name="acompanhamentos" value="Feijão carioca">
+                            <input type="checkbox" id="feijao_carioca" name="acompanhamentos" value="Feijão carioca" data-category="feijao">
                             <label for="feijao_carioca">Feijão carioca</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="feijao_branco" name="acompanhamentos" value="Feijão branco">
+                            <input type="checkbox" id="feijao_branco" name="acompanhamentos" value="Feijão branco" data-category="feijao">
                             <label for="feijao_branco">Feijão branco</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="feijao_tropeiro" name="acompanhamentos" value="Feijão tropeiro">
+                            <input type="checkbox" id="feijao_tropeiro" name="acompanhamentos" value="Feijão tropeiro" data-category="feijao">
                             <label for="feijao_tropeiro">Feijão tropeiro</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="arroz_branco" name="acompanhamentos" value="Arroz branco">
+                            <input type="checkbox" id="arroz_branco" name="acompanhamentos" value="Arroz branco" data-category="arroz">
                             <label for="arroz_branco">Arroz branco</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="arroz_refogado" name="acompanhamentos" value="Arroz refogado">
+                            <input type="checkbox" id="arroz_refogado" name="acompanhamentos" value="Arroz refogado" data-category="arroz">
                             <label for="arroz_refogado">Arroz refogado</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="macarrao" name="acompanhamentos" value="Macarrão temperado">
+                            <input type="checkbox" id="macarrao" name="acompanhamentos" value="Macarrão temperado" data-category="macarrao">
                             <label for="macarrao">Macarrão temperado</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="farofa" name="acompanhamentos" value="Farofa crocante">
+                            <input type="checkbox" id="farofa" name="acompanhamentos" value="Farofa crocante" data-category="farofa">
                             <label for="farofa">Farofa crocante</label>
                         </div>
                     </div>
-                    <div class="counter" id="acompanhamentosCounter">0 / 4 selecionados (máximo)</div>
+                    <div class="counter" id="acompanhamentosCounter">0 acompanhamentos selecionados</div>
                     <div class="error" id="acompanhamentosError"></div>
                 </div>
 
@@ -280,7 +280,7 @@
                             <label for="frutas_cortadas">Frutas cortadas</label>
                         </div>
                     </div>
-                    <div class="counter" id="saladasCounter">0 / 3 selecionados (máximo)</div>
+                    <div class="counter" id="saladasCounter">0 saladas selecionadas</div>
                     <div class="error" id="saladasError"></div>
                 </div>
 
@@ -290,19 +290,29 @@
     </div>
 
     <script>
-        // Contadores
-        function updateCounter(groupName, maxCount) {
-            const checkboxes = document.querySelectorAll(`input[name="${groupName}"]`);
-            const counter = document.getElementById(`${groupName}Counter`);
-            const checked = document.querySelectorAll(`input[name="${groupName}"]:checked`);
+        // Contadores e controle de categorias
+        function updateAcompanhamentosCounter() {
+            const checked = document.querySelectorAll('input[name="acompanhamentos"]:checked');
+            const counter = document.getElementById('acompanhamentosCounter');
+            counter.textContent = `${checked.length} acompanhamentos selecionados`;
+        }
+
+        function updateSaladasCounter() {
+            const checked = document.querySelectorAll('input[name="saladas"]:checked');
+            const counter = document.getElementById('saladasCounter');
+            counter.textContent = `${checked.length} saladas selecionadas`;
+        }
+
+        function updateCategoryRestrictions() {
+            const categories = ['feijao', 'arroz', 'macarrao', 'farofa'];
             
-            counter.textContent = `${checked.length} / ${maxCount} selecionados (máximo)`;
-            
-            // Desabilitar checkboxes quando limite atingido
-            if (groupName !== 'proteina') {
-                checkboxes.forEach(checkbox => {
+            categories.forEach(category => {
+                const categoryCheckboxes = document.querySelectorAll(`input[data-category="${category}"]`);
+                const checkedInCategory = document.querySelectorAll(`input[data-category="${category}"]:checked`);
+                
+                categoryCheckboxes.forEach(checkbox => {
                     const item = checkbox.closest('.checkbox-item');
-                    if (checked.length >= maxCount && !checkbox.checked) {
+                    if (checkedInCategory.length > 0 && !checkbox.checked) {
                         checkbox.disabled = true;
                         item.style.opacity = '0.5';
                     } else {
@@ -310,7 +320,7 @@
                         item.style.opacity = '1';
                     }
                 });
-            }
+            });
         }
 
         // Visual feedback para seleções
@@ -339,14 +349,15 @@
         // Event listeners
         document.querySelectorAll('input[name="acompanhamentos"]').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
-                updateCounter('acompanhamentos', 4);
+                updateAcompanhamentosCounter();
+                updateCategoryRestrictions();
                 updateVisualFeedback();
             });
         });
 
         document.querySelectorAll('input[name="saladas"]').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
-                updateCounter('saladas', 3);
+                updateSaladasCounter();
                 updateVisualFeedback();
             });
         });
@@ -373,10 +384,10 @@
                 isValid = false;
             }
             
-            // Validar acompanhamentos (exatamente 4)
+            // Validar acompanhamentos (pelo menos 1)
             const acompanhamentos = document.querySelectorAll('input[name="acompanhamentos"]:checked');
-            if (acompanhamentos.length !== 4) {
-                document.getElementById('acompanhamentosError').textContent = 'Selecione exatamente 4 acompanhamentos';
+            if (acompanhamentos.length === 0) {
+                document.getElementById('acompanhamentosError').textContent = 'Selecione pelo menos 1 acompanhamento';
                 isValid = false;
             }
             
@@ -387,10 +398,10 @@
                 isValid = false;
             }
             
-            // Validar saladas (exatamente 3)
+            // Validar saladas (pelo menos 1)
             const saladas = document.querySelectorAll('input[name="saladas"]:checked');
-            if (saladas.length !== 3) {
-                document.getElementById('saladasError').textContent = 'Selecione exatamente 3 saladas';
+            if (saladas.length === 0) {
+                document.getElementById('saladasError').textContent = 'Selecione pelo menos 1 salada';
                 isValid = false;
             }
             
@@ -413,6 +424,9 @@
                 // Aqui você deve colocar a URL do seu webhook n8n
                 const webhookUrl = 'https://n8n.escolaamadeus.com/webhook-test/eduhubamadeus';
                 
+                // Por enquanto, vamos simular um envio bem-sucedido
+                // Descomente as linhas abaixo quando tiver a URL do webhook
+                /*
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
@@ -421,15 +435,17 @@
                     body: JSON.stringify(formData)
                 });
                 
-                if (response.ok) {
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('pedidoForm').style.display = 'none';
-                    
-                    // Scroll para o topo para ver a mensagem de sucesso
-                    window.scrollTo(0, 0);
-                } else {
+                if (!response.ok) {
                     throw new Error('Erro ao enviar pedido');
                 }
+                */
+                
+                // Simular sucesso para teste
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('pedidoForm').style.display = 'none';
+                
+                // Scroll para o topo para ver a mensagem de sucesso
+                window.scrollTo(0, 0);
                 
             } catch (error) {
                 alert('Erro ao enviar pedido. Tente novamente.');
@@ -438,8 +454,9 @@
         });
 
         // Inicializar contadores
-        updateCounter('acompanhamentos', 4);
-        updateCounter('saladas', 3);
+        updateAcompanhamentosCounter();
+        updateSaladasCounter();
+        updateCategoryRestrictions();
     </script>
 </body>
 </html>
