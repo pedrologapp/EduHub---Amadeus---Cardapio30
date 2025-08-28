@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos Reunião Pedagógica - Amadeus</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group, .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .checkbox-item:hover, .radio-item:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .checkbox-item.selected, .radio-item.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .error {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #27ae60;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pedido do Almoço</h1>
+            <p>Reunião Pedagógica - 30/08/2024</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                Pedido enviado com sucesso! ✅
+            </div>
+
+            <form id="pedidoForm">
+                <!-- Nome do Colaborador -->
+                <div class="form-group">
+                    <label for="nome">Nome do Colaborador <span class="required">*</span></label>
+                    <input type="text" id="nome" name="nome" required>
+                    <div class="error" id="nomeError"></div>
+                </div>
+
+                <!-- Acompanhamentos -->
+                <div class="form-group">
+                    <label>Acompanhamentos <span class="required">*</span> (Escolha exatamente 4 opções)</label>
+                    <div class="checkbox-group" id="acompanhamentos">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="feijao_preto" name="acompanhamentos" value="Feijão preto">
+                            <label for="feijao_preto">Feijão preto</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="feijao_carioca" name="acompanhamentos" value="Feijão carioca">
+                            <label for="feijao_carioca">Feijão carioca</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="feijao_branco" name="acompanhamentos" value="Feijão branco">
+                            <label for="feijao_branco">Feijão branco</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="feijao_tropeiro" name="acompanhamentos" value="Feijão tropeiro">
+                            <label for="feijao_tropeiro">Feijão tropeiro</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="arroz_branco" name="acompanhamentos" value="Arroz branco">
+                            <label for="arroz_branco">Arroz branco</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="arroz_refogado" name="acompanhamentos" value="Arroz refogado">
+                            <label for="arroz_refogado">Arroz refogado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="macarrao" name="acompanhamentos" value="Macarrão temperado">
+                            <label for="macarrao">Macarrão temperado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="farofa" name="acompanhamentos" value="Farofa crocante">
+                            <label for="farofa">Farofa crocante</label>
+                        </div>
+                    </div>
+                    <div class="counter" id="acompanhamentosCounter">0 / 4 selecionados</div>
+                    <div class="error" id="acompanhamentosError"></div>
+                </div>
+
+                <!-- Proteína -->
+                <div class="form-group">
+                    <label>Proteína <span class="required">*</span> (Escolha 1 opção)</label>
+                    <div class="radio-group" id="proteina">
+                        <div class="radio-item">
+                            <input type="radio" id="frango_crocante" name="proteina" value="Frango crocante">
+                            <label for="frango_crocante">Frango crocante</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="bife_parmegiana" name="proteina" value="Bife de carne moída à parmegiana">
+                            <label for="bife_parmegiana">Bife de carne moída à parmegiana</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="lasanha_frango" name="proteina" value="Lasanha de frango">
+                            <label for="lasanha_frango">Lasanha de frango</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="bife_figado" name="proteina" value="Bife de fígado acebolado">
+                            <label for="bife_figado">Bife de fígado acebolado</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="carne_feijoada" name="proteina" value="Carne da feijoada">
+                            <label for="carne_feijoada">Carne da feijoada</label>
+                        </div>
+                    </div>
+                    <div class="error" id="proteinaError"></div>
+                </div>
+
+                <!-- Saladas -->
+                <div class="form-group">
+                    <label>Saladas <span class="required">*</span> (Escolha exatamente 3 opções)</label>
+                    <div class="checkbox-group" id="saladas">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="salada_caseira" name="saladas" value="Salada caseira">
+                            <label for="salada_caseira">Salada caseira</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="salada_tropical" name="saladas" value="Salada tropical">
+                            <label for="salada_tropical">Salada tropical</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="salada_couve" name="saladas" value="Salada de couve">
+                            <label for="salada_couve">Salada de couve</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="batata_chips" name="saladas" value="Batata Chips">
+                            <label for="batata_chips">Batata Chips</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ceviche_manga" name="saladas" value="Ceviche de manga">
+                            <label for="ceviche_manga">Ceviche de manga</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="frutas_cortadas" name="saladas" value="Frutas cortadas">
+                            <label for="frutas_cortadas">Frutas cortadas</label>
+                        </div>
+                    </div>
+                    <div class="counter" id="saladasCounter">0 / 3 selecionados</div>
+                    <div class="error" id="saladasError"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Enviar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Contadores
+        function updateCounter(groupName, maxCount) {
+            const checkboxes = document.querySelectorAll(`input[name="${groupName}"]`);
+            const counter = document.getElementById(`${groupName}Counter`);
+            const checked = document.querySelectorAll(`input[name="${groupName}"]:checked`);
+            
+            counter.textContent = `${checked.length} / ${maxCount} selecionados`;
+            
+            // Desabilitar checkboxes quando limite atingido
+            if (groupName !== 'proteina') {
+                checkboxes.forEach(checkbox => {
+                    const item = checkbox.closest('.checkbox-item');
+                    if (checked.length >= maxCount && !checkbox.checked) {
+                        checkbox.disabled = true;
+                        item.style.opacity = '0.5';
+                    } else {
+                        checkbox.disabled = false;
+                        item.style.opacity = '1';
+                    }
+                });
+            }
+        }
+
+        // Visual feedback para seleções
+        function updateVisualFeedback() {
+            // Checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                const item = checkbox.closest('.checkbox-item, .radio-item');
+                if (checkbox.checked) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+            
+            // Radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                const item = radio.closest('.radio-item');
+                if (radio.checked) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        // Event listeners
+        document.querySelectorAll('input[name="acompanhamentos"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                updateCounter('acompanhamentos', 4);
+                updateVisualFeedback();
+            });
+        });
+
+        document.querySelectorAll('input[name="saladas"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                updateCounter('saladas', 3);
+                updateVisualFeedback();
+            });
+        });
+
+        document.querySelectorAll('input[name="proteina"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                updateVisualFeedback();
+            });
+        });
+
+        // Validação e envio
+        document.getElementById('pedidoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Limpar erros anteriores
+            document.querySelectorAll('.error').forEach(error => error.textContent = '');
+            
+            let isValid = true;
+            
+            // Validar nome
+            const nome = document.getElementById('nome').value.trim();
+            if (!nome) {
+                document.getElementById('nomeError').textContent = 'Nome é obrigatório';
+                isValid = false;
+            }
+            
+            // Validar acompanhamentos (exatamente 4)
+            const acompanhamentos = document.querySelectorAll('input[name="acompanhamentos"]:checked');
+            if (acompanhamentos.length !== 4) {
+                document.getElementById('acompanhamentosError').textContent = 'Selecione exatamente 4 acompanhamentos';
+                isValid = false;
+            }
+            
+            // Validar proteína (exatamente 1)
+            const proteina = document.querySelector('input[name="proteina"]:checked');
+            if (!proteina) {
+                document.getElementById('proteinaError').textContent = 'Selecione uma proteína';
+                isValid = false;
+            }
+            
+            // Validar saladas (exatamente 3)
+            const saladas = document.querySelectorAll('input[name="saladas"]:checked');
+            if (saladas.length !== 3) {
+                document.getElementById('saladasError').textContent = 'Selecione exatamente 3 saladas';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Preparar dados para envio
+            const formData = {
+                topico: "cardapio",
+                nome_colaborador: nome,
+                acompanhamentos: Array.from(acompanhamentos).map(cb => cb.value),
+                proteina: proteina.value,
+                saladas: Array.from(saladas).map(cb => cb.value),
+                timestamp: new Date().toISOString(),
+                data_reuniao: "2024-08-30"
+            };
+            
+            console.log('Dados para n8n:', JSON.stringify(formData, null, 2));
+            
+            try {
+                // Aqui você deve colocar a URL do seu webhook n8n
+                const webhookUrl = 'YOUR_N8N_WEBHOOK_URL_HERE';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('pedidoForm').style.display = 'none';
+                    
+                    // Scroll para o topo para ver a mensagem de sucesso
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error('Erro ao enviar pedido');
+                }
+                
+            } catch (error) {
+                alert('Erro ao enviar pedido. Tente novamente.');
+                console.error('Erro:', error);
+            }
+        });
+
+        // Inicializar contadores
+        updateCounter('acompanhamentos', 4);
+        updateCounter('saladas', 3);
+    </script>
+</body>
+</html>
