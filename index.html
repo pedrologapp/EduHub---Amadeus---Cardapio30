@@ -184,7 +184,7 @@
 
                 <!-- Acompanhamentos -->
                 <div class="form-group">
-                    <label>Acompanhamentos <span class="required">*</span> (Escolha exatamente 4 opções)</label>
+                    <label>Acompanhamentos <span class="required">*</span> (Escolha até 4 opções)</label>
                     <div class="checkbox-group" id="acompanhamentos">
                         <div class="checkbox-item">
                             <input type="checkbox" id="feijao_preto" name="acompanhamentos" value="Feijão preto">
@@ -219,7 +219,7 @@
                             <label for="farofa">Farofa crocante</label>
                         </div>
                     </div>
-                    <div class="counter" id="acompanhamentosCounter">0 / 4 selecionados</div>
+                    <div class="counter" id="acompanhamentosCounter">0 / 4 selecionados (máximo)</div>
                     <div class="error" id="acompanhamentosError"></div>
                 </div>
 
@@ -253,7 +253,7 @@
 
                 <!-- Saladas -->
                 <div class="form-group">
-                    <label>Saladas <span class="required">*</span> (Escolha exatamente 3 opções)</label>
+                    <label>Saladas <span class="required">*</span> (Escolha até 3 opções)</label>
                     <div class="checkbox-group" id="saladas">
                         <div class="checkbox-item">
                             <input type="checkbox" id="salada_caseira" name="saladas" value="Salada caseira">
@@ -280,7 +280,7 @@
                             <label for="frutas_cortadas">Frutas cortadas</label>
                         </div>
                     </div>
-                    <div class="counter" id="saladasCounter">0 / 3 selecionados</div>
+                    <div class="counter" id="saladasCounter">0 / 3 selecionados (máximo)</div>
                     <div class="error" id="saladasError"></div>
                 </div>
 
@@ -296,7 +296,7 @@
             const counter = document.getElementById(`${groupName}Counter`);
             const checked = document.querySelectorAll(`input[name="${groupName}"]:checked`);
             
-            counter.textContent = `${checked.length} / ${maxCount} selecionados`;
+            counter.textContent = `${checked.length} / ${maxCount} selecionados (máximo)`;
             
             // Desabilitar checkboxes quando limite atingido
             if (groupName !== 'proteina') {
