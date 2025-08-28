@@ -421,35 +421,47 @@
             console.log('Dados para n8n:', JSON.stringify(formData, null, 2));
             
             try {
-                // Aqui você deve colocar a URL do seu webhook n8n
+                // Substitua pela sua URL do webhook n8n
                 const webhookUrl = 'https://n8n.escolaamadeus.com/webhook-test/eduhubamadeus';
                 
-                // Por enquanto, vamos simular um envio bem-sucedido
-                // Descomente as linhas abaixo quando tiver a URL do webhook
-                /*
+                // Verificar se a URL foi configurada
+                if (webhookUrl === 'https://n8n.escolaamadeus.com/webhook-test/eduhubamadeus') {
+                    console.log('Dados que seriam enviados:', JSON.stringify(formData, null, 2));
+                    alert('Configure a URL do webhook n8n primeiro!');
+                    return;
+                }
+                
+                console.log('Enviando dados:', JSON.stringify(formData, null, 2));
+                
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(formData),
+                    mode: 'cors'
                 });
                 
-                if (!response.ok) {
-                    throw new Error('Erro ao enviar pedido');
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (response.ok) {
+                    const responseData = await response.text();
+                    console.log('Response data:', responseData);
+                    
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('pedidoForm').style.display = 'none';
+                    window.scrollTo(0, 0);
+                } else {
+                    const errorText = await response.text();
+                    console.error('Erro na resposta:', errorText);
+                    throw new Error(`Erro ${response.status}: ${errorText}`);
                 }
-                */
-                
-                // Simular sucesso para teste
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('pedidoForm').style.display = 'none';
-                
-                // Scroll para o topo para ver a mensagem de sucesso
-                window.scrollTo(0, 0);
                 
             } catch (error) {
-                alert('Erro ao enviar pedido. Tente novamente.');
-                console.error('Erro:', error);
+                console.error('Erro completo:', error);
+                alert(`Erro ao enviar pedido: ${error.message}`);
             }
         });
 
