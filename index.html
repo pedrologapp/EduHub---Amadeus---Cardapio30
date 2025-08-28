@@ -424,13 +424,6 @@
                 // Substitua pela sua URL do webhook n8n
                 const webhookUrl = 'https://n8n.escolaamadeus.com/webhook-test/eduhubamadeus';
                 
-                // Verificar se a URL foi configurada
-                if (webhookUrl === 'https://n8n.escolaamadeus.com/webhook-test/eduhubamadeus') {
-                    console.log('Dados que seriam enviados:', JSON.stringify(formData, null, 2));
-                    alert('Configure a URL do webhook n8n primeiro!');
-                    return;
-                }
-                
                 console.log('Enviando dados:', JSON.stringify(formData, null, 2));
                 
                 const response = await fetch(webhookUrl, {
